@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html>
+<title>Bayesian Knowledge Testing</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
+<!--a8e1ff, d3cef2, f2b3c3, f0c297-->
+<style>
+body, html {
+   height: 100%;
+   font-family: "Inconsolata", sans-serif ;
+}
+
+
+
+@keyframes color-change {
+   0%, 100% {
+      background-color: #ACD8DB;
+   }
+   25% {
+      background-color: #ACD8DB;
+   }
+   50% {
+      background-color: #ACD8DB;
+   }
+   75% {
+      background-color: #ACD8DB;
+   }
+}
+
+.arrow {
+   display: block;
+   margin-left: auto;
+   margin-right: auto;
+   width: 20px;
+   height: auto;
+   padding-top: 25px;
+}
+
+
+.prompt-container {
+   position: absolute;
+   left: 100px;
+   width: 30%;
+   min-width: 500px;
+   max-width: 700px;
+   min-height: 850px;
+   height: auto;
+   z-index: 1;
+}
+
+
+.bar-container {
+   position: absolute;
+   right: 100px;
+   width: 30%;
+   min-width: 400px;
+   max-width: 600px;
+   min-height: 850px;
+   height: auto;
+   z-index: 1;
+}
+
+.great-container{
+  position:absolute;
+  left:0px;
+  right:0px;
+  background-color: #eeeeee;
+  width: auto;
+  height: 1800px;
+}
+
+.center {
+   text.align: center;
+   margin:auto;
+}
+
+.bgimg {
+   background-position: center;
+   background-size: cover;
+   animation: 10000ms ease-in-out infinite color-change;
+   min-height: 60%;
+}
+/* sliders */
+.slidecontainer {
+   width: 100%;
+   margin-top:-15px;
+}
+
+.slider {
+   -webkit-appearance: none;
+   width: 100%;
+   height: 25px;
+   background-image: linear-gradient(to right, #a8e1ff, #9dede9);
+   outline: none;
+   opacity: 0.7;
+   -webkit-transition: .2s;
+   transition: opacity .2s;
+}
+
+.slider:hover {
+   opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+   -webkit-appearance: none;
+   appearance: none;
+   width: 25px;
+   height: 25px;
+   outline: none;
+   background: #000;
+   cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+   width: 25px;
+   height: 25px;
+   outline: none;
+   background: #000;
+   cursor: pointer;
+}
+
+span {
+   font-weight: normal;
+}
+
+h2 {
+   font-size: 22px;
+}
+
+h4 {
+   font-size: 18px;
+   padding-bottom: 20px;
+   line-height: 1.5em;
+   font-weight: bold;
+}
+
+li {
+   margin-bottom: 20px;
+   line-height: 1.5em;
+}
+
+/* text highlight color */
+::selection {
+   background: #777; /* WebKit/Blink Browsers */
+   color: #fff;
+}
+::-moz-selection {
+   background: #777; /* Gecko Browsers */
+   color: #fff;
+}
+
+/* buttons */
+.w3-button {
+   outline: none;
+}
+
+.button {
+   right: 0;
+   top: 20px;
+   position: absolute;
+   background: #000;
+   opacity: 0.7;
+   border: none;
+   color: #fff;
+   text-transform: uppercase;
+   letter-spacing: 2px;
+   padding: 15px 30px;
+   text-align: center;
+   font-size: 14px;
+   cursor: pointer;
+   outline: none;
+}
+
+.button.card{
+  border-radius: 25px;
+  border: 2px solid #ACD8DB;
+  background: url("cardc2.png");
+  color: "white";
+  padding: 90px 63px;
+  position:relative;
+  font-size: 16px;
+  margin: 0px 0px;
+  cursor: pointer;
+}
+
+.button.card.absolute{
+  position:absolute;
+}
+
+.button:hover,
+.update:hover {
+   opacity: 1;
+   outline: none;
+}
+
+.update {
+   position: relative;
+   float: right;
+   background: none;
+   opacity: 0.7;
+   border: none;
+   color: #000;
+   text-align: center;
+   text-transform: uppercase;
+   letter-spacing: 4px;
+   right: 0;
+   top: 0;
+   font-size: 18px;
+   cursor: pointer;
+   outline: none;
+}
+
+.more {
+   width: 100%;
+   top: 0;
+   margin-bottom: 20px;
+   background: none;
+   border: 2px solid #61c8ff;
+   color: #61c8ff;
+   padding: 10px 15px;
+   text-align: center;
+   text-transform: uppercase;
+   letter-spacing: 2px;
+   font-size: 14px;
+   cursor: pointer;
+   outline: none;
+   opacity: 0.7;
+}
+
+.more:hover {
+   background-image: linear-gradient(to right, #a8e1ff, #9dede9);
+   padding: 12px 15px;
+   border: none;
+   color: #fff;
+   opacity: 1;
+}
+
+.more.second {
+   border: 2px solid #b5aeea;
+   color: #b5aeea;
+}
+
+.more.second:hover {
+   background-image: linear-gradient(to right, #d3cef2, #c2dff0);
+   padding: 12px 15px;
+   border: none;
+   color: #fff;
+   opacity: 1;
+}
+
+.more.third {
+   border: 2px solid #ee9bb0;
+   color: #ee9bb0;
+}
+
+.more.third:hover {
+   background-image: linear-gradient(to right, #f2b3c3, #e0d1e8);
+   padding: 12px 15px;
+   border: none;
+   color: #fff;
+   opacity: 1;
+}
+
+
+.more.forth {
+   border: 2px solid #ecb179;
+   color: #ecb179;
+}
+
+.more.forth:hover {
+   background-image: linear-gradient(to right, #f0c297, #fccfcf);
+   padding: 12px 15px;
+   border: none;
+   color: #fff;
+   opacity: 1;
+}
+
+.more.fifth {
+   border: 2px solid #86c6c6;
+   color: #86c6c6;
+}
+
+.more.fifth:hover {
+   background-image: linear-gradient(to right, #ACD8DB, #AFF8DB);
+   padding: 12px 15px;
+   border: none;
+   color: #fff;
+   opacity: 1;
+}
+
+
+
+
+.extra {
+   display: none;
+}
+
+/* The Modal (background) */
+.modal {
+   display: none;
+   position: fixed;
+   z-index: 1;
+   padding-top: 100px;
+   left: 0;
+   top: 0;
+   width: 100%;
+   height: 100%;
+   overflow: auto;
+   background-color: rgb(0,0,0);
+   background-color: rgba(0,0,0,0.7);
+}
+
+/* pop-up */
+.modal-content {
+   background-color: #fff;
+   margin: auto;
+   padding: 50px;
+   border: none;
+   width: 80%;
+   height: auto;
+   text-align: center;
+   text-transform: uppercase;
+   letter-spacing: 5px;
+   font-size: 32px;
+}
+
+.close {
+   opacity: 0.7;
+   color: #000;
+   float: right;
+   font-size: 28px;
+   font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+   opacity: 1;
+   text-decoration: none;
+   cursor: pointer;
+}
+
+/* probability buttons */
+.right {
+   position: relative;
+   float: right;
+   right: 0;
+}
+
+.left {
+   position: relative;
+   float: left;
+   left: 0;
+}
+
+/* navbar */
+.w3-blue-grey {
+   background: #000 !important;
+   opacity: 0.7;
+}
+
+.nav-button:hover {
+   background: none !important;
+   color: #a8e1ff !important;
+}
+
+/* back to top */
+#back2Top {
+    width: 40px;
+    line-height: 40px;
+    overflow: hidden;
+    z-index: 999;
+    display: none;
+    cursor: pointer;
+    -moz-transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    transform: rotate(270deg);
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    font-size: 30px;
+    text-decoration: none;
+    opacity: 0.7;
+}
+
+#back2Top:hover {
+    opacity: 1;
+}
+</style>
+<body>
+   <a id="back2Top" title="Back to top" href="#">&#10148;</a>
+
+   <!-- Links (sit on top) -->
+   <div class="w3-top">
+      <div class="w3-row w3-padding w3-blue-grey">
+         <div class="w3-col s4">
+            <a href="#Intro" class="nav-button w3-button w3-block w3-#111">Intro</a>
+         </div>
+         <div class="w3-col s4">
+            <a href="#BKT" class="nav-button w3-button w3-block w3-#111">BKT</a>
+         </div>
+         <div class="w3-col s4">
+            <a href="#Interactive" class="nav-button w3-button w3-block w3-#111">Interactive</a>
+         </div>
+      </div>
+   </div>
+
+   <!-- Header with image -->
+   <header class="bgimg w3-display-container w3-grayscale-min" id="home">
+      <div class="w3-display-middle">
+         <center><span class="w3-text-white" style="font-size:60px">Tests, Memory, and Artificial Intelligence</span></center>
+      </div>
+      <div class="w3-display-bottommiddle w3-padding-large">
+         <span class="w3-text-white" style="font-size:30px"><em>How can we know what people know?</em></span>
+      </div>
+   </header>
+
+   <!-- Add a background color -->
+   <div class="w3-white w3-large">
+      <br/><br/><br/>
+
+      <!-- Intro Container -->
+      <!-- Question 1 -->
+      <div class="w3-container" id="Intro">
+         <div class="w3-content" style="max-width:700px">
+            <h2 class="w3-wide w3-center w3-padding-64" style="text-transform:uppercase"> Let's Take a Test</h2>
+            <h2 class="w3-center w3-opacity" style="font-size:20px"> (Don't worry, it isn't graded)</h2>
+            <h2 class="w3-wide w3-center w3-padding-32"></h2>
+            <h2 class="w3-wide w3-center w3-padding-24"></h2>
+            <h3 id="what is in the image below">What is in the picture below?</h3>
+            <h2 class="w3-wide w3-center w3-padding-24"></h2>
+            <img src="rainbow.png" alt="rainbow" style="width:100%;max-width:1000px">
+            <br/><br/>
+            <output><em><b><center><h3><span id="answer1"/></span></h3></center></b></em></output>
+            <br/>
+            <div class="w3-bar w3-center">
+               <button id="a1" class="w3-button w3-round w3-grey" style="margin-right:10px">MIELO</a>
+               <button id="b1" class="w3-button w3-round w3-grey" style="margin-right:10px">ĈIELARKO</a>
+               <button id="c1" class="w3-button w3-round w3-grey" style="margin-right:10px">DORSOSAKO</a>
+               <button id="d1" class="w3-button w3-round w3-grey">ALUMETOJ</a>
+            </div>
+            <br/>
+            <p id="select1">
+               Selected Answer: <span id="word1" style="font-weight:bold"/></span>
+            </p>
+            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <p id="cor1">The correct answer is <em>Ĉielarko</em>.
+               Did you get it right?<br/>
+               Probably not.<br/><br/>
+            </p>
+
+            <!--Talking about Esperanto-->
+            <p>
+               The answers were in <a href="https://en.wikipedia.org/wiki/Esperanto">Esperanto</a>,
+               an international universal language created in the 19th century.
+               If you don’t know Esperanto, you probably just guessed.
+            </p>
+            <p>
+               Although not the best strategy, anybody who has taken a multiple choice test will know that just because you made
+               a guess doesn’t mean you got the question wrong.</p>
+            <p>
+               As there are 4 possible answers, we have a &frac14; chance of a correct guess, or a probability of 0.25.
+            </p>
+            <br/><br/><br/>
+
+            <p>Let’s try one more:
+            <br/><br/></p>
+            <div class="aside-container"><div class="aside"><br/><br/></div></div>
+
+            <!--Question 2-->
+            <h2 id="what-color-is-the-flag?">What color is the flag?</h2>
+            <em>(Hint: Look at the previous question)</em>
+            <br/><br/><br/>
+          <center>  <img src="flag.png" alt="rainbow flag" style="width:90%;max-width:1000px" > </center>
+            <h2 class="w3-wide w3-center w3-padding-12"></h2>
+            <br/>
+            <em><center><strong><h3><span id="answer2"/></span></h3></strong></center></em>
+            <br/>
+            <div class="w3-bar w3-center">
+               <button id="a2" class="w3-button w3-round w3-grey" style="margin-right:10px">ALUMETOJ</a>
+               <button id="b2" class="w3-button w3-round w3-grey" style="margin-right:10px">MIELO</a>
+               <button id="c2" class="w3-button w3-round w3-grey" style="margin-right:10px">ĈIELARKO</a>
+               <button id="d2" class="w3-button w3-round w3-grey">DORSOSAKO</a>
+            </div>
+            <br/>
+
+            <p>Selected Answer: <span id="word2" style="font-weight:bold"/> </span></p>
+            <br/><br/><br/><br/><br/><br/><br/><br/>
+            The answer here is also <em>Ĉielarko</em>.
+            <br/>
+            <p>Did you get it right?</p>
+            <p>Probably!<br/><br/><br/></p>
+            <p>
+               There is still a guess probability of 0.25, so what happened?<br/>
+               You learned.
+            </p>
+            <br/><br/>
+
+
+            <!--Transition to BKT-->
+            <h1 id="what-if-you-were-a-computer?">What If You Were a Computer? </h1>
+            <p>
+            <br/>
+               Somebody inputs the correct answer.
+               How do we know for sure if they are guessing, or really “know” it?
+            </p>
+            <p>Answer: We don’t.
+            <br/><br/>
+            We cannot know for sure. Bayesian Knowledge Tracing (BKT) Algorithms can help us predict what people know.
+            <!--End of Container-->
+         </div>
+      </div>
+
+
+      <!--Baysian Knowledge Tracing Container-->
+      <div class="w3-container" id="BKT">
+         <div class="w3-content" style="max-width:700px">
+            <h2 class="w3-wide w3-center w3-padding-64" style="text-transform:uppercase"> Bayesian Knowledge Tracing</h2>
+            <p>One piece of information we do have is the guess probability, the probability of getting the answer correct on a guess. We will call this probability <strong>P(guess)</strong>.</p>
+            <p>This is the first parameter of the Bayesian Knowledge Tracing Algorithm.</p>
+            <p>Do you remember the value of <strong>P(guess)</strong> from our questions? You can drag the slider to explore different options:</p>
+
+            <!--P(guess) Slider-->
+            <br/>
+            <p> Number of Potential Answers: <span id="numq"/></span> </p>
+            <input id="gSlide" class="slider" type="range" value="10" min="1" max="10" step="1"/>
+            <br/>
+            <br/>
+
+            <strong>P(guess):</strong>
+            <span id="PG"/></span>
+
+            <br/>
+            <br/>
+
+            <p>
+               Because there were 4 possible answers to each of the multiple choice questions, and only 1 was correct,
+               <strong>P(guess)</strong> was equal to 0.25.
+            </p>
+            <!--update-->
+            <p>
+               Let us consider the situation where a user inputs the correct answer to a multiple choice question.
+               <strong>P(guess)</strong> alone cannot tell us whether the user knows the correct answer, or if it is a guess.
+               <strong>P(guess)</strong> is just the probability of getting the correct answer with no prior knowledge.
+            </p><br/>
+
+            <h3 id="what-if-we-had-information-about-the-previous-guess?">What if we had information about the previous guess?</h3>
+            <p>We answered two questions. We will call these questions <i>N</i> and <em>N+1</em>.<br/>
+               Was there a difference between the two questions?</p>
+
+
+            <!--N and N+1 Pictures-->
+            <br/>
+            <div class="w3-row-padding w3-margin-top">
+               <div class="w3-half">
+                  <div class="w3-card">
+                     <img src="rainbow-n.png" alt="rainbow with N" style="width:100%">
+                     <div class="w3-container">
+                     </div>
+                  </div>
+               </div>
+
+               <div class="w3-half">
+                  <div class="w3-card">
+                     <img src="rainbow-flag-n1.png" alt="rainbow flag with N+1" style="width:100%">
+                     <div class="w3-container">
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <br/>
+
+
+            <!--P(known)-->
+            <p>Yes!</p>
+            <p> We came into the second question with prior knowledge about Esperanto. Specifically, we had learned the word <em>Ĉielarko</em> (rainbow).
+            This allowed us to pick the correct answer. We call the probability that the user has prior knowledge <strong>P(known)</strong>.</p>
+            <p>
+               For the first question <i>N</i>,  <strong>P(known)</strong> was likely 0 (0%).<br/>
+               For the second question <i>N+1</i>,  <strong>P(known)</strong> was around 1 (100%).<br/><br/>
+            </p>
+
+
+            <!--P(learning)-->
+            <h3 id="p(learning)">P(learning)</h3>
+            <p>
+               <strong>P(learning)</strong> is the probability that a user will gain knowledge
+               after a learning opportunity (after attempting a question <i>N</i>).
+               In this case, <strong>P(learning)</strong> is also close to 1.
+            </p>
+            <p>By answering the first question, the user is likely to gain mastery over the word <em>Ĉielarko</em>.</p>
+            <h4 id="the-longer-an-esperanto-word,-the-lower-the-probability-of-learning-it:" style="font-weight:normal">
+              <br/>
+            The longer an Esperanto word, the lower the probability of learning it [2]:</h4>
+            <center><h3 <strong><em><span id="esWord"/></span></em></strong></h3></center>
+            <!--P(learning) Slider-->
+            <p> Number of Syllables in Word: <span id="numsyl"/></span> </p>
+            <input id="lSlide" class="slider" type="range" value="3" min="1" max="8" step="1"
+            style="background-image: linear-gradient(to right, #f2b3c3, #e0d1e8)"/>
+
+            <br/>
+            <br/>
+
+            <strong>P(learning)</strong>:
+            <span id="PL"/></span></p>
+
+            <br/>
+
+
+            <!--P(slip)-->
+            <h3 id="p(slip)">P(slip)</h3>
+               <p>There is one other situation to consider. It is possible to know a match and
+               still choose incorrectly, potentially due to rushing, a mispelled word, or misplaced click.
+               This is called a “slip”. The probability of a slip <strong>P(slip)</strong> is the final
+               parameter in the Bayesian Knowledge Tracing algorithm.</p>
+
+               <p> A high value of <strong>P(slip)</strong> (ex: <strong>P(slip)=.6</strong>)
+                 indicates a user who knows the correct answer to a question is
+                 more likely to get the question incorrect than correct. A low
+                 value of <strong>P(slip)</strong> (ex: <strong>P(slip)=.02</strong>)
+                 indicates that a user who knows the correct answer is almost certain to get
+                 the question correct.
+
+               <IMG SRC="gif3.gif">
+                 <br/>
+                  <br/>
+                  <br/>
+
+
+               <!-- BKT Formula Description -->
+                 <h3 id="BKT: The Formula">BKT: The Formula </h3>
+                  <p>
+                     Every time the user answers a question, our algorithm calculates <b>P(Mastered)</b>,
+                     the probability that the user has learned the skill they are working on, using the parameters discussed above.
+                     The formula for <b>P(Mastered)</b> depends on whether the users' response was correct [1].
+                     <br/>
+                     <br/>
+                     <img src="form1.png" alt="Equation for P Mastered if Correct" style="width:100%;max-width:1000px" >
+                     <br/>
+                     <br/>
+                    <img src="form2.png" alt="Equation for P Mastered if incorrect" style="width:100%;max-width:1000px" >
+                      <br/>
+                     <br/>
+                     <br/>
+                     For the following question <em>N+1</em>, <b>P(Mastered)</b> is converted into the new value of <b>P(known)</b>.
+                     This is calculated using <b>P(learning)</b>. <b>P(Mastered)</b> is the passed value of either <strong>P(Mastered if Correct)</strong>
+                     or <strong>P(Mastered if Incorrect)</strong> [1].
+                     <br/>
+                     <br/>
+                     <img src="form3.png" alt="Equation for a new P known" style="width:100%;max-width:1000px" >
+                     <br/>
+                     <br/>
+                     <br/>
+                     Once <b>P(known)</b> ≥ 0.95, we say the user has achieved mastery.
+                  </p>
+                  <p>
+                     Now that you’ve had a chance to learn about the four parameters,
+                     here’s a tool that can help you explore the relationships between them
+                     and how exactly each influences the probability calculations underlying BKT.
+                  </p>
+                  <br/>
+                  <br/>
+                  <br/>
+                </div>
+             </div>
+            <!--End of Container-->
+
+
+
+             <!-- Interactive Container -->
+            <div class="w3-container" id="Interactive">
+                <div class="w3-content" style="max-width:700px; background-color="#dddddd"">
+                  <h2 class="w3-wide w3-center w3-padding-64" style="text-transform:uppercase"> Memory Game </h2>
+
+
+
+                    <p>
+                      Bayesian Knowledge Tracing Algorithms can be understood through the card game Memory.
+                      In memory, a deck of cards is spread out, face down.
+                      The goal is to match cards that are the same. Click two cards. See if you find a match.
+                    </p>
+
+                    <p>
+                       Remember, <b>P(Mastered)</b> depends on whether the student answers correctly.
+                       This probability becomes the new value for <b>P(known)</b>.
+                     </p>
+                     <p>
+                       Play the Memory game below. See if you can achieve mastery!
+                    </p>
+
+                    <br/><br/><br/>
+
+
+                    <img class="arrow" src="down-arrow.png" title="start arrow" alt="start arrow" >
+
+
+                    <br/><br/>
+
+                  </div>
+
+                    <div class="great-container", style="align:left">
+                      <br/><br/><br/>
+
+                    <div class="prompt-container" id="p-contain">
+
+                    <div class="right">
+                    <h2> <span id="mBool"></span></h2>
+                  </div>
+
+                    <!-- init slider -->
+                    <h3><strong>P(known): <span id="demoI"> <span id="mBool"></span></strong></span></h3>
+                    <input type="range" min="0.0" max="1.0" value="0.0" step="0.01" class="slider"
+                    style="background-image: linear-gradient(to right, #f0c297, #fccfcf)" id="init" oninput="updateI(this.value)" />
+
+                    <!--Mastered if Correct and Mastered if Incorrect-->
+                    <br/>
+                    <div class="left">
+                      <h3 style="font-size:14px">P(Mastered if Correct): <span id="correct"></span></h4>
+                    </div>
+
+                    <div class="right">
+                      <h3 style="font-size:14px">P(Mastered if Incorrect): <span id="wrong"></span></h4>
+                    </div>
+
+
+                    <!-- Cards -->
+                    <input type="hidden" id="cardnum" value="0">
+
+                    <br/><br/>
+
+                    <div>
+                    <div class="left">
+                       <input type="button" class="button card absolute" style="width:90px;left:455px;"
+                       id="card1" value="" onclick="cardFlip(card1, 1)" />
+                    </div>
+
+                    <div class="left">
+                       <input type="button" class="button card absolute" style="width:90px; left:5px;"
+                       id="card2" value="" onclick="cardFlip(card2, 2)" />
+                    </div>
+
+                    <div class="left">
+                       <input type="button" class="button card absolute" style="width:90px; left:155px;"
+                       id="card3" value="" onclick="cardFlip(card3, 3)" />
+                    </div>
+
+                    <div class="left">
+                       <input type="button" class="button card absolute" style="width:90px; left:305px;"
+                       id="card4" value="" onclick="cardFlip(card4, 4)" />
+                    </div>
+
+                    <div class="left">
+                       <input type="button" class="button card absolute" style="width:90px; left:5px; top:250px;"
+                       id="card5" value="" onclick="cardFlip(card5, 5)" />
+                    </div>
+
+                    <div class="left">
+                       <input type="button" class="button card absolute" style="width:90px;top:250px; left:455px"
+                       id="card6" value="" onclick="cardFlip(card6, 6)" />
+                    </div>
+
+                    <div class="left">
+                       <input type="button" class="button card absolute" style="width:90px; left:155px; top:250px;"
+                       id="card7" value="" onclick="cardFlip(card7, 0)" />
+                    </div>
+
+                    <div class="left">
+                       <input type="button" class="button card absolute" style="width:90px; left:305px; top:250px;"
+                       id="card8" value="" onclick="cardFlip(card8, 7)" />
+                    </div>
+                  </div>
+
+                  <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/></br></br>
+
+                    <div class="center">
+                       <input type="button" class="button" style="position:relative;margin-top:40px;margin-left:0;margin-bottom:25px;width:290px"
+                       id="mix" value="Shuffle" onclick="mixCards(card1,card2,card3,card4,card5,card6,card7,card8)" />
+                    </div>
+
+
+
+
+                    <br/><br/><br/><br/> <br/>
+  <!-- P(Mastered if correct) -->
+  <!-- P(Mastered if wrong) -->
+                    <!--ß
+                    <div class="left">
+                       <input type="button" class="button" style="position:relative;margin-top:-5px;margin-left:0;margin-bottom:25px;width:290px"
+                       id="learned1" value="Answer Correct" onclick="changeP(correct, init)" />
+
+                    </div>
+
+
+                    <div class="right">
+                       <input type="button" class="button" style="position:relative;margin-top:-5px;margin-left:0;margin-bottom:25px;width:290px"
+                       id="learned2" value="Answer Wrong" onclick="changeP(wrong, init)" />
+
+                    </div>
+                  -->
+               <div style="font-size:14px">
+                  <br/>
+               Here are some prompts to develop a deeper intuition about BKT:
+                  <ol>
+                     <li>
+                        Find a match. Click it again. What happens?
+                     </li>
+                     <input type="button" class="more" value="More" onclick="showMore(this, more1)" />
+                     <ul class="extra" id="more1">
+                        <li>
+                           <b>P(learn)</b> will continue to increase.
+                        </li>
+                        <li>
+                          For this memory game, our Bayesian Knowledge Tracing algorithm can be "tricked"
+                          into achieving mastery.
+                        </li>
+                     </ul>
+
+                     <li>
+                        What happens if <b>P(guess)</b> and <b>P(slip)</b>
+                        are set at 0.5?
+                     </li>
+                     <input type="button" class="more second" value="More" onclick="showMore(this, more2)" />
+                     <ul class="extra" id="more2">
+                        <li>
+                           The <b>P(Mastered)</b> formula differs depending on whether a response is correct or incorrect.
+                           However, both formulas result in the same probability if both <b>P(guess)</b> and <b>P(slip)</b> = 0.5.
+                        </li>
+                        <li>
+                           <b>P(learn)</b> will be the same whether or not a match is
+                           found. Mastery no longer depends on correctness.
+                        </li>
+                     </ul>
+
+                     <li>What happens if <b>P(guess)</b> and/or <b>P(slip)</b> exceed 0.5?</li>
+                     <input type="button" class="more third" value="More" onclick="showMore(this, more3)" />
+                     <ul class="extra" id="more3">
+                        <li>
+                         <b>P(Mastered)</b> is higher if the user answers <i>incorrectly</i> than if
+                         the user answers <i>correctly</i>. Getting two different cards will
+                         increase the level of mastery more than getting a match.
+                         This doesn't make any sense.
+                        </li>
+                        <li>
+                         BKT works best when <b>P(guess)</b> is below 0.3 and <b>P(slip)</b> is below 0.1 [1].
+                        </li>
+                     </ul>
+                   </ol>
+                 </div>
+
+
+                  </div>
+
+
+
+
+              <div class="bar-container" id="p-contain">
+
+                <br/>
+
+                <h4 style=""> Additional Parameters </h4>
+
+
+                <div style="font-size:16px">
+                  Drag the sliders below to adjust the values of the parameters with which <b>P(known)</b> is calculated.
+                   Play the memory game again. Try to obtain mastery for different slider combinations.
+                 </div>
+
+                 <br/>
+                 <!-- buttons -->
+                 <input type="button" class="button" id="res" value="Reset" onclick="reset()"
+                 style="right:0px; position:relative; float:right; height:40px; padding: 10px 30px;" />
+
+                 <br/>
+                </p>
+
+
+                <!-- sliders -->
+                <div class="slidecontainer">
+
+                   <!-- trans -->
+                   <div>
+                   <h4 style="font-size:16px; padding:8px 0px;"> P(learning): <span id="demoT"></span></h4>
+                   <input type="range" min="0.0" max="1.0" value="0.2" step="0.01" class="slider"
+                   style="background-image: linear-gradient(to right, #f2b3c3, #e0d1e8)" id="trans" oninput="updateT(this.value)" />
+
+
+                   <!-- slip -->
+                   <h4 style="font-size:16px; padding:8px 0px;" >P(slip): <span id="demoS"></span></h4>
+                   <input type="range" min="0.01" max="1.0" value="0.05" step="0.01" class="slider"
+                   style="background-image: linear-gradient(to right, #d3cef2, #c2dff0)" id="slip" oninput="updateS(this.value)" />
+
+
+                   <!-- guess -->
+                   <h4 style="font-size:16px; padding:8px 0px;">P(guess): <span id="demoG"></span></h4>
+                   <input type="range" min="0.01" max="1.0" value=".14" step="0.01" class="slider" id="guess" oninput="updateG(this.value)"
+                   style="margin-bottom:15px;" />
+                </div>
+              </div>
+                <h6 style="font-size:14px;"> **The default value of P(guess) is <sup>1</sup>&frasl;<sub>7</sub>, the probability of a random match.</h6>
+
+
+
+               <!--Prompts-->
+               <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/> <br/>
+              <div style="font-size:14px">
+
+              <ol start="4">
+                  <li>Move <b>P(known)</b> to a very low value and make an incorrect match. What happened?</li>
+                  <input type="button" class="more forth" value="More" onclick="showMore(this, more4)" />
+                  <ul class="extra" id="more4">
+                     <li>
+                        <b>P(known)</b> increases. The level of mastery is higher.
+                     </li>
+                     <li>
+                        Even incorrect answers
+                          increase knowledge. Think back to our first example.
+                          Getting the first multiple choice question wrong probably
+                           helped you answer the second one.
+                     </li>
+                  </ul>
+
+                  <li>Make <b>P(learning)</b> higher than its default value. How does this change how mastery is achieved in the memory game?</li>
+                  <input type="button" class="more fifth" value="More" onclick="showMore(this, more5)" />
+                  <ul class="extra" id="more5">
+                     <li>
+                        It should be easier to achieve mastery. <b>P(known)</b> will increase more with each turn.
+                     </li>
+                     <li>
+                        <b>P(learning)</b> is the most subjective of the BKT parameters.
+                        Try to find a value of <b>P(learning)</b>
+                        that seems correct for you.
+                     </li>
+                  </ul>
+                  <br/>
+                  <br/>
+                  <br/>
+
+                  Keep exploring! Can you find any other flaws or interesting characteristics of BKT?
+               </ol>
+
+               </div>
+             </div>
+             <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+             <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <!--    <img class="arrow" src="down-arrow.png" title="start arrow" alt="start arrow" > -->
+
+             </div>
+
+
+            </div>
+      <!--End of Container-->
+<br/><br/><br/><br/><br/><br/><br/><br/><br/> <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/><br/><br/>
+
+</div>
+
+
+      <!-- End page content -->
+   </div>
+
+   <!-- Footer -->
+   <center><footer class=" w3-white w3-padding-48 w3-large">
+      <div style="max-width:800px;margin-top:0;margin-right:0;margin-bottom:0;margin-left:50px;" class="idyll-text-container">
+         <h3 id="References">References</h3>
+         <ol>
+            <li style="text-align:left">
+               Baker, R. S., Corbett, A. T., & Aleven, V. (2008). More Accurate Student Modeling through
+               Contextual Estimation of Slip and Guess Probabilities in Bayesian Knowledge Tracing.
+               Intelligent Tutoring Systems Lecture Notes in Computer Science, 406-415. doi:10.1007/978-3-540-69132-7_44
+            </li>
+
+            <li style="text-align:left">Baddeley, A. D., Thomson, N., &amp; Buchanan, M. (<!-- -->1<!-- -->9<!-- -->7<!-- -->5<!-- -->).
+               Word length and the structure of short-term memory. Journal of Verbal Learning and Verbal Behavior,
+               <!-- -->1<!-- -->4<!-- -->(<!-- -->6<!-- -->), <!-- -->5<!-- -->7<!-- -->5<!-- -->-<!-- -->5<!-- -->8<!-- -->9<!-- -->.
+               doi:<!-- -->1<!-- -->0<!-- -->.<!-- -->1<!-- -->0<!-- -->1<!-- -->6<!-- -->/s<!-- -->0<!-- -->0<!-- -->2<!-- -->2<!-- -->-<!-- -->5
+               <!-- -->3<!-- -->7<!-- -->1<!-- -->(<!-- -->7<!-- -->5<!-- -->)<!-- -->8<!-- -->0<!-- -->0<!-- -->4<!-- -->5<!-- -->-<!-- -->4
+            </li>
+
+         </ol>
+         <em> Created by Noah Cowit, Catherine Yeh, and Iris Howley </em>
+      </div>
+   </footer></center>
+   <!--end of html-->
+
+
+   <script>
+      // back to top
+      $(window).scroll(function() {
+          var height = $(window).scrollTop();
+          if (height > 100) {
+              $('#back2Top').fadeIn();
+          } else {
+              $('#back2Top').fadeOut();
+          }
+      });
+      $(document).ready(function() {
+          $("#back2Top").click(function(event) {
+              event.preventDefault();
+              $("html, body").animate({ scrollTop: 0 }, "slow");
+              return false;
+          });
+      });
+
+      // Multiple Choice questions
+      var word1 = document.getElementById("word1");
+      var answer1 = document.getElementById("answer1");
+      var word2 = document.getElementById("word2");
+      var answer2 = document.getElementById("answer2");
+      var a1 = document.getElementById("a1");
+      var b1 = document.getElementById("b1");
+      var c1 = document.getElementById("c1");
+      var d1 = document.getElementById("d1");
+      var a2 = document.getElementById("a2");
+      var b2 = document.getElementById("b2");
+      var c2 = document.getElementById("c2");
+      var d2 = document.getElementById("d2");
+      answer1.innerHTML = "Select Below"
+      answer2.innerHTML = "Select Below"
+
+      a1.onclick = function() {
+         word1.innerHTML = "Mielo";
+         answer1.innerHTML = "Incorrect"
+         document.getElementById("answer1").style.color = "#f2b3c3";
+      }
+
+      b1.onclick = function() {
+         word1.innerHTML = "Ĉielarko";
+         answer1.innerHTML = "Correct"
+         document.getElementById("answer1").style.color = "#9eddff";
+      }
+
+      c1.onclick = function() {
+         word1.innerHTML = "Dorsosako";
+         answer1.innerHTML = "Incorrect"
+         document.getElementById("answer1").style.color = "#f2b3c3";
+      }
+
+      d1.onclick = function() {
+         word1.innerHTML = "Alumetoj";
+         answer1.innerHTML = "Incorrect"
+         document.getElementById("answer1").style.color = "#f2b3c3";
+      }
+
+      a2.onclick = function() {
+         word2.innerHTML = "Alumetoj";
+         answer2.innerHTML = "Incorrect"
+         document.getElementById("answer2").style.color = "#f2b3c3";
+      }
+
+      b2.onclick = function() {
+         word2.innerHTML = "Mielo";
+         answer2.innerHTML = "Incorrect"
+         document.getElementById("answer2").style.color = "#f2b3c3";
+      }
+
+      c2.onclick = function() {
+         word2.innerHTML = "Ĉielarko";
+         answer2.innerHTML = "Correct"
+         document.getElementById("answer2").style.color = "#9eddff";
+      }
+
+      d2.onclick = function() {
+         word2.innerHTML = "Dorsosako";
+         answer2.innerHTML = "Incorrect"
+         document.getElementById("answer2").style.color = "#f2b3c3";
+      }
+
+
+
+      // Sliders
+      var array1 = new Array ("Fakte", "Pomo", "Ŝtrumpeto", "Malpuraĵo", "Elkavatoro", "Xenotransplantado",
+      "Rombosidodekedro", "Kontraŭleĝaestablado");
+
+      var esWord = document.getElementById("esWord");
+      var gSlider = document.getElementById("gSlide");
+      var numq = document.getElementById("numq");
+      var lSlider = document.getElementById("lSlide");
+      var numsyl = document.getElementById("numsyl");
+      var pg = document.getElementById("PG");
+      var pl = document.getElementById("PL");
+      numsyl.innerHTML = lSlider.value; // Display the lSlider value
+      numq.innerHTML = gSlider.value; // Display the gSlider value
+      pl.innerHTML = (1/lSlider.value)-(.1/lSlider.value); // Display the pl value
+      pg.innerHTML = (1/gSlider.value); // Display the pg value
+      esWord.innerHTML=array1[lSlider.value-1];
+
+      // Update the gSlider value (each time you drag the slider handle)
+      gSlider.oninput = function() {
+         numq.innerHTML = this.value;
+         pg.innerHTML = Math.round(100*(1/this.value))/100;
+      }
+
+      // Update the lSlider value (each time you drag the slider handle)
+      lSlider.oninput = function() {
+         numsyl.innerHTML = this.value;
+         pl.innerHTML = Math.round((100)*((1/this.value)-(.1/this.value)))/100;
+         esWord.innerHTML=array1[this.value-1];
+       }
+
+
+
+      // Catherine's code starts here!
+      reset();
+
+      // show additional info for prompt
+      function showMore(b, id) {
+         id.classList.toggle("extra");
+         b.value = (b.value === "More" ? "Less" : "More");
+      }
+
+      // change P(init)
+      function changeP(val, slide) {
+         slide.value = val.innerHTML;
+         updateI(slide.value);
+      }
+
+//Memory Game (Noah)
+
+      //Values of each of the cards
+      var arrayCard = new Array ("Fakte", "Pomo", "Mielo", "Najlo", "Fakte", "Pomo", "Mielo", "Najlo");
+
+      //helper array
+      for (var a=[],i=0;i<8;++i) a[i]=i;
+
+      //"Tracker" variables
+      var count=0;
+      var previousCard;
+
+      //Randomize the Helper array
+      function shuffle(array) {
+        var tmp, current, top = array.length;
+        if(top) while(--top) {
+          current = Math.floor(Math.random() * (top + 1));
+          tmp = array[current];
+          array[current] = array[top];
+          array[top] = tmp;
+          }
+            return array;
+          }
+
+      //Mix cards and reset P(init)
+      function mixCards(cardA,cardB,cardC,cardD,cardE,cardF,cardG,cardH){
+        a=shuffle(a);
+
+        //previousCard.value=undefined;
+
+        count=0;
+
+        var i = document.getElementById("init");
+
+        cardA.style.background = "#dddddd";
+        setTimeout(function(){cardBack(cardA);},333);
+
+        cardB.style.background = "#dddddd";
+        setTimeout(function(){cardBack(cardB);},67);
+
+        cardC.style.background = "#dddddd";
+        setTimeout(function(){cardBack(cardC);},113);
+
+        cardD.style.background = "#dddddd";
+        setTimeout(function(){cardBack(cardD);},200);
+
+        cardE.style.background = "#dddddd";
+        setTimeout(function(){cardBack(cardE);},167);
+
+        cardF.style.background = "#dddddd";
+        setTimeout(function(){cardBack(cardF);},367);
+
+        cardG.style.background = "#dddddd";
+        setTimeout(function(){cardBack(cardG);},220);
+
+        cardH.style.background = "#dddddd";
+        setTimeout(function(){cardBack(cardH);},267);
+
+        i.value = i.defaultValue;
+        updateI(i.defaultValue);
+      }
+
+function setToNull(){
+
+}
+
+
+
+
+      //initial mix of cards
+      mixCards(document.getElementById("card1"),document.getElementById("card2"),
+      document.getElementById("card3"),document.getElementById("card4"),
+      document.getElementById("card5"),document.getElementById("card6"),
+      document.getElementById("card7"),document.getElementById("card8"),);
+
+      //!!!Don't give correct answers for the same match over and over again (or do, but explain the limitations of BKT)!!
+      function cardFlip(card, num){
+        if (card.value==""){
+        card.value = (card.value === "" ? arrayCard[a[num]] : "");
+        card.style.backgroundColor = (card.style.backgroundColor === "grey" ? "white" : "grey");
+        card.style.backgroundImage = (card.style.backgroundImage ===  "none" ? "url('cardc2.png')" : "none");
+
+        //Modify P(Known)
+        if(count===1){
+          count--;
+          setTimeout(function(){cardBack(previousCard);cardBack(card)},500);
+          if(card.value==previousCard.value){
+            changeP(correct, init);
+            previousCard=NULL;
+          }else{
+            changeP(wrong, init);
+            previousCard=NULL;
+          }
+        }else{
+          count++;
+          setTimeout(function(){previousCard=card;},200);
+        }
+      }
+
+      }
+
+      function cardBack(card){
+        card.value= "";
+        card.style.backgroundColor ="white";
+        card.style.backgroundImage = "url('cardc2.png')";
+      }
+
+
+
+//Back to Catherines Code
+
+      // display initial values for each parameter (except p(init))
+      function reset() {
+         var t = document.getElementById("trans");
+         t.value = t.defaultValue;
+         updateT(t.defaultValue);
+
+         var s = document.getElementById("slip");
+         s.value = s.defaultValue;
+         updateS(s.defaultValue);
+
+         var g = document.getElementById("guess");
+         g.value = g.defaultValue;
+         updateG(g.defaultValue);
+      }
+
+      // update slider values
+      // P(init)
+      function updateI(val) {
+         document.getElementById("demoI").innerHTML = val;
+         updateProbs();
+      }
+
+      // P(trans)
+      function updateT(val) {
+         document.getElementById("demoT").innerHTML = val;
+         updateProbs();
+      }
+
+      // P(slip)
+      function updateS(val) {
+         document.getElementById("demoS").innerHTML = val;
+         updateProbs();
+      }
+
+      // P(guess)
+      function updateG(val) {
+         document.getElementById("demoG").innerHTML = val;
+         updateProbs();
+      }
+
+      // update P(Mastered) and P(correct)
+      function updateProbs() {
+         // get the parameter values
+         var i = document.getElementById("init").value,
+         i_c = 1.0 - i,
+         t = document.getElementById("trans").value,
+         t_c = 1.0 - t,
+         s = document.getElementById("slip").value,
+         s_c = 1.0 - s,
+         g = document.getElementById("guess").value,
+         g_c = 1.0 - g;
+
+         // conditional probabilities
+         var r = (i * s_c) / (i * s_c + i_c * g),
+         w = (i * s) / (i * s + i_c * g_c);
+
+         var learnC = r + (1.0 - r) * t,
+         cor = document.getElementById("correct");
+         cor.innerHTML = learnC.toFixed(2);
+
+         var learnW =  w + (1.0 - w) * t,
+         wro = document.getElementById("wrong");
+         wro.innerHTML = learnW.toFixed(2);
+
+         // check if mastery achieved (modified from the original by Noah)
+         var mBool = document.getElementById("mBool");
+         mBool.innerHTML = "NOT MASTERED";
+
+         if (i >= 0.95) {
+            mBool.innerHTML = "MASTERED";
+            document.getElementById("mBool").style.color = "#70cdff"
+         }else{
+           document.getElementById("mBool").style.color = "#ef9fb3"
+         }
+      }
+
+
+   </script>
+</body>
+</html>
